@@ -4,124 +4,134 @@ import sys
 import copy
 
 """randomly generates 2 teams
-4 players: players sees 1 other player
-6 players: players sees 1.5 other players
-8 players: players sees 2 other players"""
+4 players: players sees [0, 1, 1, 1] other player
+6 players: players sees [1, 1, 1, 2, 2, 2] other players
+8 players: players sees [2, 2, 2, 2, 2, 2, 2, 2] other players"""
 
 os.system("color 70")
 
 spade_symbol = "♠"
 heart_symbol = "♡"
+
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def getTeam(list, number):
-    for i in list:
-        if i == number:
-            return f"Spade {spade_symbol}"
-    return f"Heart {heart_symbol}"
+def getTeam(number):
+    if master_dict[number][0] == "spade":
+        return f"Spade {spade_symbol}"
+    else:
+        return f"Heart {heart_symbol}"
 
-def getSymbol(list, number):
-    for i in list:
-        if i == number:
-            return f"{spade_symbol}"
-    return f"{heart_symbol}"
+def getSymbol(number):
+    if master_dict[number][0] == "spade":
+        return f"{spade_symbol}"
+    else:
+        return f"{heart_symbol}"
+
+def makeTeamList(team):
+    list = []
+    for i in master_dict:
+        if master_dict[i][0] == team:
+            list.append(master_dict[i][2])
+    return list
+
 while True:
     cls()
-    print("Start of Random Modified Coup.\n")
+    print("Start of Discord Coup.\n")
     correct_number = True
     while correct_number:
-        print("Enter number of players (4, 6, 8):\n")
-        temp = sys.stdin.readline()
-        if temp == "4\n"or temp == "6\n" or temp == "8\n":
+        print("Enter number of players (4, 6, 8):")
+        player_number = sys.stdin.readline()
+        if player_number == "4\n"or player_number == "6\n" or player_number == "8\n":
             correct_number = False
         else:
             print("Invalid number, try again.")
 
-    if temp == "4\n":
-        player_number = 4
-        toSeeOne = [0, 1, 2, 3]
-        spade = [0, 1, 2, 3]
-        heart = []
-        temp_list_copy = [0, 1, 2, 3]
-    elif temp == "6\n":
-        player_number = 6
-        toSeeOne = [0, 1, 2, 3, 4, 5]
-        spade = [0, 1, 2, 3, 4, 5]
-        heart = []
-        temp_list_copy = [0, 1, 2, 3, 4, 5]
-        for i in range(3):
-            toSeeOne.remove(random.choice(toSeeOne))
-    elif temp == "8\n":
-        player_number = 8
-        spade = [0, 1, 2, 3, 4, 5, 6, 7]
-        heart = []
-        temp_list_copy = [0, 1, 2, 3, 4, 5, 6, 7]
-        toSeeOne = []
-    
-    for i in range(int(player_number/2)):
-        temp = random.choice(spade)
-        heart.append(temp)
-        spade.remove(temp)
-
-    spade.sort()
-    heart.sort()
-    adjacencyList = []
-
-    for i in range(player_number):
-        peekNumber = 2
-        for j in toSeeOne:
-            if i == j:
-                peekNumber = 1
-        toSee = []
-        templist = copy.deepcopy(temp_list_copy)
-        templist.remove(i)
-        if peekNumber == 1:
-            temp = random.choice(templist)
-            toSee.append(temp)
-        else:
-            temp = random.choice(templist)
-            toSee.append(temp)
-            templist.remove(temp)
-            toSee.append(random.choice(templist))
-        toSee.sort()
-        adjacencyList.append(toSee)
+    player_number = int(player_number)
+    player_name_list = []
+    max_player_name_length = 0
     
     for i in range(0, player_number):
-        print("Press ENTER as player {}.".format(i))
+        print(f"Enter name for player {i}:")
+        player_name_to_add = sys.stdin.readline()[:-1]
+        player_name_list.append(player_name_to_add)
+        if len(player_name_to_add) > max_player_name_length:
+            max_player_name_length = len(player_name_to_add)
+    
+    if player_number == 4:
+        peek_number_list = [0, 1, 1, 1]
+    elif player_number == 6:
+        peek_number_list = [1, 1, 1, 2, 2, 2]
+    elif player_number == 8:
+        peek_number_list = [2, 2, 2, 2, 2, 2, 2, 2]
+
+    team_list = []
+    for i in range(int(player_number/2)):
+        team_list.append("spade")
+        team_list.append("heart")
+    random.shuffle(team_list)
+    
+    master_dict = {}
+    pristine_player_list = []
+        
+    random.shuffle(peek_number_list)
+    for i in range(player_number):
+        master_dict[i] = (team_list.pop(), peek_number_list.pop(), player_name_list[i])
+        pristine_player_list.append(i)
+    
+    adjacency_list = []
+    
+    for i in range(0, player_number):
+        to_add_to_adjacency_list = []
+        list_without_current_player = copy.deepcopy(pristine_player_list)
+        list_without_current_player.remove(i)
+        random.shuffle(list_without_current_player)
+        for j in range(0, master_dict[i][1]):
+            temp_player = list_without_current_player.pop()
+            to_add_to_adjacency_list.append(temp_player)
+        adjacency_list.append((i, to_add_to_adjacency_list))
+    
+    
+    for i in range(0, player_number):
+        print(f"Press ENTER as {master_dict[i][2]}.")
         input()
         cls()
-        print("You are player {}, team: {}\n".format(i, getTeam(spade, i)))
-        for j in adjacencyList[i]:
-            print("Player {} is team: {}.".format(j, getTeam(spade, j)))
-        print("\n" * 3)
+        print(f"{master_dict[i][2]}, team: {getTeam(i)}\n")
+        
+        for j in adjacency_list[i][1]:
+            print(f"{master_dict[j][2]} is team: {getTeam(j)}.")
+        print("")
         print("Press ENTER to clear screen, then pass to next player.")
         input()
         cls()
     print("All players information given, press ENTER twice to see teams.")
     input()
     print("Press ENTER again.")
+    
     input()
     cls()
-    print(f"Team spade {spade_symbol}: {spade}")
-    print(f"Team heart {heart_symbol}: {heart}\n")
+    spade_list = makeTeamList("spade")
+    heart_list = makeTeamList("heart")
+    print(f"Spade {spade_symbol}: {spade_list}")
+    print(f"Heart {heart_symbol}: {heart_list}\n")
     
-    toPrint = "    "
-    line = "    "
-    for i in range(player_number):
-        toPrint += f" {i}{getSymbol(spade, i)}"
-        line += "___"
+    toPrint = " " * max_player_name_length + "   "
+    line = " " * max_player_name_length + "   "
+    for i in range(0, player_number):
+        toPrint += f" {master_dict[i][2]}{getSymbol(i)}"
+        line += "_" * (len(master_dict[i][2]) + 2)
     print(toPrint)
     print(line)
     for i in range(player_number):
         toPrint = ""
         for j in range(player_number):
-            if j in adjacencyList[i]:
-                toPrint += str(j) + getSymbol(spade, j) + " "
+            if j in adjacency_list[i][1]:
+                toPrint += f"{master_dict[j][2]}{getSymbol(j)} "
             else:
-                toPrint += "-- "
-        print("{}{} | {}".format(i, getSymbol(spade, i), toPrint))
-    print("\n" * 5)
+                toPrint += "-" * (len(master_dict[j][2]) + 1) + " "
+        padding = " " * (max_player_name_length - len(master_dict[i][2]))
+        print(f"{padding}{master_dict[i][2]}{getSymbol(i)} | {toPrint}")
+    print("\n")
     print("End of game, press ENTER twice to exit.")
     input()
     print("Press ENTER again.")
