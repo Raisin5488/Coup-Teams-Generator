@@ -29,11 +29,11 @@ def getSymbol(number):
         return f"{heart_symbol}"
 
 def makeTeamList(team):
-    list = []
+    return_string = ""
     for i in master_dict:
         if master_dict[i][0] == team:
-            list.append(master_dict[i][2])
-    return list
+            return_string += master_dict[i][2] + ", "
+    return return_string[:-2]
 
 while True:
     cls()
@@ -96,12 +96,12 @@ while True:
         print(f"Press ENTER as {master_dict[i][2]}.")
         input()
         cls()
-        print(f"{master_dict[i][2]}, team: {getTeam(i)}\n")
+        print(f"{master_dict[i][2]} is {getTeam(i)}\n")
         
         for j in adjacency_list[i][1]:
-            print(f"{master_dict[j][2]} is team: {getTeam(j)}.")
+            print(f"{master_dict[j][2]} is {getTeam(j)}")
         print("")
-        print("Press ENTER to clear screen, then pass to next player.")
+        print("Press ENTER to clear screen.")
         input()
         cls()
     print("All players information given, press ENTER twice to see teams.")
@@ -112,8 +112,8 @@ while True:
     cls()
     spade_list = makeTeamList("spade")
     heart_list = makeTeamList("heart")
-    print(f"Spade {spade_symbol}: {spade_list}")
-    print(f"Heart {heart_symbol}: {heart_list}\n")
+    print(f"Spade {spade_symbol} {spade_list}")
+    print(f"Heart {heart_symbol} {heart_list}\n")
     
     toPrint = " " * max_player_name_length + "   "
     line = " " * max_player_name_length + "   "
