@@ -96,10 +96,10 @@ while True:
         print(f"Press ENTER as {master_dict[i][2]}.")
         input()
         cls()
-        print(f"{master_dict[i][2]} is {getTeam(i)}\n")
+        print(f"{master_dict[i][2]} {getSymbol(i)}\n")
         
         for j in adjacency_list[i][1]:
-            print(f"{master_dict[j][2]} is {getTeam(j)}")
+            print(f"{master_dict[j][2]} {getSymbol(j)}")
         print("")
         print("Press ENTER to clear screen.")
         input()
@@ -112,8 +112,8 @@ while True:
     cls()
     spade_list = makeTeamList("spade")
     heart_list = makeTeamList("heart")
-    print(f"Spade {spade_symbol} {spade_list}")
-    print(f"Heart {heart_symbol} {heart_list}\n")
+    print(f"{spade_symbol} {spade_list}")
+    print(f"{heart_symbol} {heart_list}\n")
     
     toPrint = " " * max_player_name_length + "   "
     line = " " * max_player_name_length + "   "
