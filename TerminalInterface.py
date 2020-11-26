@@ -11,7 +11,7 @@ def cls():
 cls()
 
 
-self.possible_input = ["4", "6", "8"]
+possible_input = ["4", "6", "8"]
 
 while True:
     player_number = input("Input number of players (4, 6, 8): ")
