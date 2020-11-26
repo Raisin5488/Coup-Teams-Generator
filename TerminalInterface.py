@@ -10,10 +10,13 @@ def cls():
 
 cls()
 
-valid_player_numbers = ["4", "6", "8"]
+
+self.possible_input = ["4", "6", "8"]
+
 while True:
     player_number = input("Input number of players (4, 6, 8): ")
-    if player_number in valid_player_numbers:
+    if player_number in possible_input:
+        cls()
         current_game = TeamsGenerator(int(player_number))
         current_player_number = 0
         while current_player_number < int(player_number):
@@ -27,15 +30,20 @@ while True:
         current_game.generateTeams()
         cls()
         for player in current_game.player_objects:
-            input(f"Press enter as player {player.name}\n")
+            input(f"ENTER as player {player.name}\n")
             cls()
             print(player.getInformation())
-            input("\nPress enter to clear screen.")
+            input("\nENTER to clear screen.")
             cls()
-        input("Press enter again to see end information.")
+        input("ENTER again to see end information.")
         cls()
         print(current_game.displayEndInformation())
         input()
     else:
-        cls()
         print("Invalid input (4, 6, 8).")
+
+
+
+
+
+
