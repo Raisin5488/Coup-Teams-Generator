@@ -3,8 +3,10 @@ from TeamGenerator import TeamsGenerator
 
 os.system("color 70")
 
+
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
+
 
 cls()
 
