@@ -11,7 +11,7 @@ def cls():
 cls()
 
 
-self.possible_input = ["4", "6", "8"]
+possible_input = ["4", "6", "8"]
 
 while True:
     player_number = input("Input number of players (4, 6, 8): ")
@@ -27,23 +27,25 @@ while True:
                 print("Player name is taken.")
             else:
                 current_player_number += 1
-        current_game.generateTeams()
         cls()
-        for player in current_game.player_objects:
-            input(f"ENTER as player {player.name}\n")
+        while True:
+            current_game.generateTeams()
+            for player in current_game.player_objects:
+                input(f"ENTER as {player.name}\n")
+                cls()
+                print(player.getInformation())
+                input("\nENTER to clear screen.")
+                cls()
+            input("ENTER again to see end information.")
             cls()
-            print(player.getInformation())
-            input("\nENTER to clear screen.")
-            cls()
-        input("ENTER again to see end information.")
-        cls()
-        print(current_game.displayEndInformation())
-        input()
+            print(current_game.displayEndInformation())
+            temp = input("\nInput 0 to keep current names: ")
+            if temp == "0":
+                print("Regenerating game.")
+                cls()
+            else:
+                cls()
+                break
     else:
         print("Invalid input (4, 6, 8).")
-
-
-
-
-
 

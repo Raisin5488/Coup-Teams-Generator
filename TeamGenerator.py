@@ -29,7 +29,8 @@ class TeamsGenerator(AbstractTeamGenerator):
         self.heart_symbol = "♡"
 
     def generateTeams(self):
-
+        self.player_objects = []
+        
         if self.player_number == 4:
             peek_number_list = [0, 1, 1, 1]
         elif self.player_number == 6:
@@ -37,7 +38,6 @@ class TeamsGenerator(AbstractTeamGenerator):
         elif self.player_number == 8:
             peek_number_list = [2, 2, 2, 2, 2, 2, 2, 2]
         random.shuffle(peek_number_list)
-
         teams = []
         for i in range(0, self.player_number//2):
             teams.append("spade")
