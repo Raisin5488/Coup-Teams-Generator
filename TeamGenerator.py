@@ -78,38 +78,39 @@ class TeamsGenerator(AbstractTeamGenerator):
 
     def displayEndInformation(self):
         self.setMaxPlayerNameLength()
-
+        return_str = ""
         spade_list = self.makeTeamList("spade")
         heart_list = self.makeTeamList("heart")
-        print(f"{self.spade_symbol} {spade_list}")
-        print(f"{self.heart_symbol} {heart_list}\n")
+        return_str += f"{self.spade_symbol} {spade_list}"
+        return_str += f"\n{self.heart_symbol} {heart_list}\n"
 
         to_print = " " * self.max_player_name_length + "   "
         line = " " * self.max_player_name_length + "   "
         for player in self.player_objects:
             to_print += f" {player.name}{player.symbol}"
             line += "_" * (len(player.name) + 2)
-        print(to_print)
-        print(line)
+        return_str += "\n" + to_print
+        return_str += "\n" + line
         for player in self.player_objects:
-            toPrint = ""
+            to_print = ""
             for possible_player_to_see in self.player_objects:
                 if possible_player_to_see in player.known_players:
-                    toPrint += f"{possible_player_to_see.name}{possible_player_to_see.symbol} "
+                    to_print += f"{possible_player_to_see.name}{possible_player_to_see.symbol} "
                 else:
                     to_print += "-" *(len(possible_player_to_see.name) + 1) + " "
-            padding = " " * (self.max_player_name_length - len(possible_player_to_see.name))
-            print(f"{padding}{player.name}{player.symbol} | {toPrint}")
+            padding = " " * (self.max_player_name_length - len(player.name))
+            return_str += f"\n{padding}{player.name}{player.symbol} | {to_print}"
+        return return_str
 
     def __repr__(self):
         pass
 
     def makeTeamList(self, team):
-        team_list = []
+        return_str = ""
         for i in self.player_objects:
             if i.team == team:
-                team_list.append(i)
-        return team_list
+                return_str += i.name + ", "
+        return return_str[:-2]
 
 
 class Player:
@@ -133,7 +134,9 @@ class Player:
         return self.team
 
     def getInformation(self):
-        to_print = f"{self.name} {self.team}\n"
+        to_print = f"{self.name} {self.symbol}\n"
         for i in self.known_players:
-            to_print += f"\n{i.name} {i.team}"
+            to_print += f"\n{i.name} {i.symbol}"
         return to_print
+
+
